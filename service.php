@@ -60,6 +60,32 @@ $app->post('/searchUser', function ($request, $response, $args) use ($app) {
 	echo json_encode($arrResult);
 });	
 
+$app->post('/getUserDetail', function ($request, $response, $args) use ($app) {
+
+	$json = $request->getBody();
+	$data = json_decode($json, true); 
+	$conn = conndb();
+	$sql = "select u.userId,u.username,u.fullName,u.position,divn.divnName,u.flag from users u join divisions divn on u.divnId=divn.divnId where u.userId=".$data['userId']." and u.flag='1'  LIMIT 1 ";
+	$query = $conn->query($sql);
+	//$row = mysql_fetch_assoc($query);
+ 	$row = $query->fetch_assoc();
+
+
+	$arrResult = array();
+	$arrResult = array('userId' => $row['userId']);
+/*
+	array_push($arrResult,array(
+		'userId' => $item['userId'],
+		'username' => $item['username'],
+		'fullName' => $item['fullName'],
+		'position' => $item['position'],
+		'divnName' => $item['divnName'],
+		'flag' => $item['flag'],
+        ));
+*/
+	echo json_encode($arrResult);
+});	
+
 $app->run();
 
 ?>
