@@ -72,18 +72,21 @@ $app->post('/getUserDetail', function ($request, $response, $args) use ($app) {
 
 
 	$arrResult = array();
-	$arrResult = array('userId' => $row['userId']);
-/*
-	array_push($arrResult,array(
-		'userId' => $item['userId'],
-		'username' => $item['username'],
-		'fullName' => $item['fullName'],
-		'position' => $item['position'],
-		'divnName' => $item['divnName'],
-		'flag' => $item['flag'],
-        ));
-*/
+	$arrResult = array('userId' => $row['userId'],'username' => $row['username'],'fullName' => $row['fullName'],'position' => $row['position'],'divnName' => $row['divnName'],'flag' => $row['flag']);
 	echo json_encode($arrResult);
+});	
+
+$app->post('/newUser', function ($request, $response, $args) use ($app) {
+
+	$json = $request->getBody();
+	$data = json_decode($json, true); 
+	$conn = conndb();
+	$sql = "insert into users(fullname,position,divnId,username,password) values('".$data['fullName']."','".$data['position']."',".$data['divn'].",'".$data['username']."',MD5('".$data['password']."'))";
+	if($conn->query($sql))
+		echo json_encode(array('status' => 'success'));
+	else
+		echo json_encode(array('status' => 'fail'));
+
 });	
 
 $app->run();
