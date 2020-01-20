@@ -81,7 +81,8 @@ $app->post('/newUser', function ($request, $response, $args) use ($app) {
 	$json = $request->getBody();
 	$data = json_decode($json, true); 
 	$conn = conndb();
-	$sql = "insert into users(fullname,position,divnId,username,password) values('".$data['fullName']."','".$data['position']."',".$data['divn'].",'".$data['username']."',MD5('".$data['password']."'))";
+	$sql = "insert into users(fullName,position,divnId,flag,username,password) ";
+	$sql .= "values('".$data['fullName']."','".$data['position']."',".$data['divn'].",'".$data['status']."','".$data['username']."',MD5('".$data['password']."'))";
 	if($conn->query($sql))
 		echo json_encode(array('status' => 'success'));
 	else
