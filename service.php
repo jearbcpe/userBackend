@@ -1,5 +1,7 @@
 <?php
 header('Access-Control-Allow-Origin: *');
+header('Access-Control-Allow-Headers: *');
+//header("Access-Control-Allow-Methods: GET, POST, OPTIONS, PUT, DELETE");
 
 require 'connect_db.php';
 require '../vendor/autoload.php';
@@ -65,14 +67,13 @@ $app->post('/getUserDetail', function ($request, $response, $args) use ($app) {
 	$json = $request->getBody();
 	$data = json_decode($json, true); 
 	$conn = conndb();
-	$sql = "select u.userId,u.username,u.fullName,u.position,divn.divnName,u.flag from users u join divisions divn on u.divnId=divn.divnId where u.userId=".$data['userId']." and u.flag='1'  LIMIT 1 ";
+	$sql = "select u.userId,u.username,u.fullName,u.position,divn.divnId,divn.divnName,u.flag from users u join divisions divn on u.divnId=divn.divnId where u.userId=".$data['userId']." LIMIT 1 ";
 	$query = $conn->query($sql);
-	//$row = mysql_fetch_assoc($query);
  	$row = $query->fetch_assoc();
 
 
 	$arrResult = array();
-	$arrResult = array('userId' => $row['userId'],'username' => $row['username'],'fullName' => $row['fullName'],'position' => $row['position'],'divnName' => $row['divnName'],'flag' => $row['flag']);
+	$arrResult = array('userId' => $row['userId'],'username' => $row['username'],'fullName' => $row['fullName'],'position' => $row['position'],'divnId'=>$row['divnId'],'divnName' => $row['divnName'],'flag' => $row['flag']);
 	echo json_encode($arrResult);
 });	
 
