@@ -91,6 +91,26 @@ $app->post('/newUser', function ($request, $response, $args) use ($app) {
 
 });	
 
+$app->post('/editUser', function ($request, $response, $args) use ($app) {
+
+	$json = $request->getBody();
+	$data = json_decode($json, true); 
+	$conn = conndb();
+
+	$sql = "update users set fullName='".$data['fullName']."',position='".$data['position']."',divnId=".$data['divn'].",flag='".$data['status']."'";
+
+	if(trim($data['password']) != "")
+		$sql .= ",password=MD5('".$data['password']."') ";
+
+	$sql .= " where userId=".$data['userId'];
+	
+	if($conn->query($sql))
+		echo json_encode(array('status' => 'success'));
+	else
+		echo json_encode(array('status' => 'fail'));
+
+});	
+
 $app->run();
 
 ?>
